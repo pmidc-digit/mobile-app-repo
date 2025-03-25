@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mseva/components/home_screen.dart';
-import 'package:mseva/components/starting_screen.dart';
+//import 'package:mseva/components/home_screen.dart';
+import 'package:mseva_punjab/components/starting_screen.dart';
+//import 'package:mseva/components/starting_screen.dart';
 
 
 void main() {

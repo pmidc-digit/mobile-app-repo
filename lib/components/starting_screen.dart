@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-//import 'package:webview_flutter/webview_flutter.dart';
-import 'package:mseva/utils/web_view_body_load.dart';
+import 'package:mseva_punjab/utils/web_view_body_load.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+//import 'package:mseva/utils/web_view_body_load.dart';
 
 class StartingScreen extends StatelessWidget {
   const StartingScreen({super.key});
