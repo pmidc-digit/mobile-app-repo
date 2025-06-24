@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_new_app/utils/web_view_body_load.dart';
+import 'package:mseva_punjab/utils/web_view_body_load.dart';
+
 
 class StartingScreen extends StatelessWidget {
   const StartingScreen({super.key});
@@ -48,7 +49,7 @@ class StartingScreen extends StatelessWidget {
                               child: WebViewBodyLoad(
                                 pageTitle: 'mSeva',
                                 pageUrl:
-                                    'https://mseva.lgpunjab.gov.in/digit-ui/citizen',
+                                    'https://mseva.lgpunjab.gov.in/citizen',
                                 headerFooterRequired: false,
                               ),
                             ),
@@ -87,7 +88,7 @@ class StartingScreen extends StatelessWidget {
                               child: WebViewBodyLoad(
                                 pageTitle: 'mSeva',
                                 pageUrl:
-                                    'https://mseva.lgpunjab.gov.in/digit-ui/employee',
+                                    'https://mseva.lgpunjab.gov.in/employee',
                                 headerFooterRequired: false,
                               ),
                             ),
