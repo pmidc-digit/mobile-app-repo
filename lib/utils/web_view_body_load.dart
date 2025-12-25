@@ -1,8 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:geolocator/geolocator.dart';
+
 
 class WebViewBodyLoad extends StatefulWidget {
   final String pageTitle;
@@ -28,7 +27,6 @@ class _WebViewBodyLoadState extends State<WebViewBodyLoad> {
   void initState() {
     super.initState();
    _checkAndPromptLocationServices();
-   _requestPermissions();
 
   }
 
@@ -56,21 +54,6 @@ class _WebViewBodyLoadState extends State<WebViewBodyLoad> {
 }
 
 
-Future<void> _requestPermissions() async {
- // await Permission.location.request();
-  await Permission.camera.request();
-  // await Permission.microphone.request();
-
-  if (Platform.isAndroid) {
-    if (Platform.version.compareTo('33') >= 0) {
-      await Permission.photos.request();
-    } else {
-      await Permission.storage.request();
-    }
-  }
-}
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,6 +62,15 @@ Future<void> _requestPermissions() async {
       //   title: Text( widget.pageTitle, style: TextStyle(color: Colors.white),
       //   )
       //   ),
+      appBar: AppBar(
+        title: Text(widget.pageTitle),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Stack(
         children: [
           InAppWebView(

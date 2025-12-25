@@ -47,10 +47,10 @@ class StartingScreen extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => const SafeArea(
                               child: WebViewBodyLoad(
-                                pageTitle: 'mSeva',
+                                pageTitle: 'Home',
                                 pageUrl:
-                                    'https://mseva.lgpunjab.gov.in/citizen',
-                                headerFooterRequired: false,
+                                    'https://mseva.lgpunjab.gov.in/digit-ui/citizen',
+                                headerFooterRequired: true,
                               ),
                             ),
                           ),
@@ -86,10 +86,10 @@ class StartingScreen extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => const SafeArea(
                               child: WebViewBodyLoad(
-                                pageTitle: 'mSeva',
+                                pageTitle: 'Home',
                                 pageUrl:
-                                    'https://mseva.lgpunjab.gov.in/employee',
-                                headerFooterRequired: false,
+                                    'https://mseva.lgpunjab.gov.in/digit-ui/employee',
+                                headerFooterRequired: true
                               ),
                             ),
                           ),
