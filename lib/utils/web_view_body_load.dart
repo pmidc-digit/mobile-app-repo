@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:geolocator/geolocator.dart';
@@ -23,6 +23,7 @@ class WebViewBodyLoad extends StatefulWidget {
 
 class _WebViewBodyLoadState extends State<WebViewBodyLoad> {
   bool isLoading = true;
+  bool hasAccessToken = false;
   InAppWebViewController? _webViewController;
 
   @override
@@ -63,19 +64,46 @@ Future<void> _requestPermissions() async {
 
 }
 
+Future<void> _checkToken() async {
+  if (_webViewController == null || !mounted) return;
+  
+  try {
+    final tokenResult = await _webViewController!.evaluateJavascript(
+      source: "localStorage.getItem('token')"
+    );
+    
+    //print('✅✅✅✅ Token found: $tokenResult');
+    
+    if (mounted && tokenResult != null && tokenResult.toString().isNotEmpty) {
+      setState(() {
+        hasAccessToken = true;  // Hide AppBar
+      });
+    }
+    else{
+      setState(() {
+        hasAccessToken=false;
+      });
+    }
+  } catch (e) {
+    print('❌ Token check error: $e');
+  }
+ }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.pageTitle),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      appBar: !hasAccessToken  // Conditional: Hide if token exists
+          ? AppBar(
+              title: Text(widget.pageTitle),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            )
+          : null,
       body: Stack(
         children: [
           InAppWebView(
@@ -102,7 +130,17 @@ Future<void> _requestPermissions() async {
               setState(() {
                 isLoading = false;
               });
+
+             await Future.delayed(Duration(seconds: 2));  // Initial delay
+             _checkToken();
             },
+      
+              // Check on every URL change (handles SPA navigation)
+            onUpdateVisitedHistory: (controller, url, androidIsReload) async {
+              await Future.delayed(Duration(milliseconds: 500));
+              _checkToken();
+            },
+
             // Use the new, cross-platform geolocation callback
             onGeolocationPermissionsShowPrompt: (controller, origin) async {
               return GeolocationPermissionShowPromptResponse(
@@ -111,6 +149,28 @@ Future<void> _requestPermissions() async {
                 retain: true,
               );
             },
+
+              // ADD THIS SINGLE CALLBACK (5 lines total)
+            // onDownloadStartRequest: (controller, downloadStartRequest) async {
+            //     // Opens download URL in DEFAULT BROWSER
+            //   final url = downloadStartRequest.url.toString();
+            //   print('✅✅✅ Opening download in browser: $url');
+            // },
+            onDownloadStartRequest: (controller, downloadStartRequest) async {
+               final downloadUrl = downloadStartRequest.url.toString();
+  
+               // 🚀 Opens DEFAULT MOBILE BROWSER for download
+               if (await canLaunchUrl(Uri.parse(downloadUrl))) {
+                await launchUrl(
+                Uri.parse(downloadUrl),
+                mode: LaunchMode.externalApplication,  // Opens system browser
+                );
+               }
+  
+               //print('✅✅✅ Opened browser for download: $downloadUrl');
+             },
+
+
           ),
           if (isLoading)
             Container(
