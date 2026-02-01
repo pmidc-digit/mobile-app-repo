@@ -89,10 +89,46 @@ Future<void> _checkToken() async {
   }
  }
 
+Future<bool> _onBackPressed() async {
+  if (!hasAccessToken) return true;  // Allow normal back if not logged in
+
+  bool? confirm = await showDialog<bool>(
+    context: context,
+    barrierDismissible: false,  // Prevent outside taps
+    builder: (context) => AlertDialog(
+      title: const Text('Confirm Exit?'),
+      content: const Text('Are you sure you want to exit?'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false), 
+          child: const Text('No'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),  
+          child: const Text('Yes'),
+        ),
+      ],
+    ),
+  );
+
+  return confirm ?? false;  // Default to stay if dialog dismissed unexpectedly
+}
+
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+
+ return PopScope(
+  canPop: false,  // Enable interception
+  onPopInvokedWithResult: (bool didPop, Object? result) async {
+    if (didPop) return;  // Already popped (rare)
+    
+    // Veto pop only if logged in by showing dialog
+    if (await _onBackPressed()) {
+      if (mounted) Navigator.of(context).pop();
+    }
+  },
+  child:  Scaffold(
       appBar: !hasAccessToken  // Conditional: Hide if token exists
           ? AppBar(
               title: Text(widget.pageTitle),
@@ -179,6 +215,7 @@ Future<void> _checkToken() async {
             ),
         ],
       ),
-    );
+    )
+  );
   }
 }
