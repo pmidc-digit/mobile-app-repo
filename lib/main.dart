@@ -1,12 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mseva_punjab/components/starting_screen.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:mseva_punjab/theme/app_theme.dart';
 
 void main() {
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -14,12 +12,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-     title: 'mSeva',
+      title: 'mSeva Punjab',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
+      theme: buildAppTheme(),
       home: const StartingScreen(),
     );
   }
