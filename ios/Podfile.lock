@@ -35,10 +35,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  flutter_inappwebview_ios: b89ba3482b96fb25e00c967aae065701b66e9b99
-  location: 155caecf9da4f280ab5fe4a55f94ceccfab838f8
+  flutter_inappwebview_ios: 6f63631e2c62a7c350263b13fa5427aedefe81d4
+  location: d5cf8598915965547c3f36761ae9cc4f4e87d22e
   OrderedSet: e539b66b644ff081c73a262d24ad552a69be3a94
-  permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
+  permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
 
 PODFILE CHECKSUM: cf63296cc299b5997536ba0c5d12b879f8ca9d56
 
