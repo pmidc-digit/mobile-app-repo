@@ -127,80 +127,83 @@ class _WebViewBodyLoadState extends State<WebViewBodyLoad> {
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
-        body: Stack(
-          children: [
-            InAppWebView(
-              onPermissionRequest: (controller, request) async {
-                return PermissionResponse(
-                  resources: request.resources,
-                  action: PermissionResponseAction.GRANT,
-                );
-              },
-              initialUrlRequest: URLRequest(url: WebUri(widget.pageUrl)),
-              initialSettings: InAppWebViewSettings(
-                javaScriptEnabled: true,
-                allowsInlineMediaPlayback: true,
-                mediaPlaybackRequiresUserGesture: false,
-                useOnDownloadStart: true,
-                allowsBackForwardNavigationGestures: true,
-              ),
-              onWebViewCreated: (controller) {
-                _webViewController = controller;
-              },
-              onLoadStop: (controller, url) async {
-                setState(() => isLoading = false);
-                await Future<void>.delayed(const Duration(seconds: 2));
-                _checkToken();
-              },
-              onUpdateVisitedHistory: (controller, url, androidIsReload) async {
-                await Future<void>.delayed(const Duration(milliseconds: 500));
-                _checkToken();
-              },
-              onGeolocationPermissionsShowPrompt: (controller, origin) async {
-                return GeolocationPermissionShowPromptResponse(
-                  origin: origin,
-                  allow: true,
-                  retain: true,
-                );
-              },
-              onDownloadStartRequest: (controller, downloadStartRequest) async {
-                final downloadUrl = downloadStartRequest.url.toString();
-                if (await canLaunchUrl(Uri.parse(downloadUrl))) {
-                  await launchUrl(
-                    Uri.parse(downloadUrl),
-                    mode: LaunchMode.externalApplication,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              InAppWebView(
+                onPermissionRequest: (controller, request) async {
+                  return PermissionResponse(
+                    resources: request.resources,
+                    action: PermissionResponseAction.GRANT,
                   );
-                }
-              },
-            ),
-            if (isLoading)
-              ColoredBox(
-                color: Colors.white,
-                child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        'assets/mSeva.jpg',
-                        height: 72,
-                        fit: BoxFit.contain,
-                      ),
-                      const SizedBox(height: 24),
-                      const CircularProgressIndicator(
-                        color: AppColors.blue,
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        'Loading...',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppColors.lightGrey,
-                            ),
-                      ),
-                    ],
+                },
+                initialUrlRequest: URLRequest(url: WebUri(widget.pageUrl)),
+                initialSettings: InAppWebViewSettings(
+                  javaScriptEnabled: true,
+                  allowsInlineMediaPlayback: true,
+                  mediaPlaybackRequiresUserGesture: false,
+                  useOnDownloadStart: true,
+                  allowsBackForwardNavigationGestures: true,
+                ),
+                onWebViewCreated: (controller) {
+                  _webViewController = controller;
+                },
+                onLoadStop: (controller, url) async {
+                  setState(() => isLoading = false);
+                  await Future<void>.delayed(const Duration(seconds: 2));
+                  _checkToken();
+                },
+                onUpdateVisitedHistory:
+                    (controller, url, androidIsReload) async {
+                      await Future<void>.delayed(
+                        const Duration(milliseconds: 500),
+                      );
+                      _checkToken();
+                    },
+                onGeolocationPermissionsShowPrompt: (controller, origin) async {
+                  return GeolocationPermissionShowPromptResponse(
+                    origin: origin,
+                    allow: true,
+                    retain: true,
+                  );
+                },
+                onDownloadStartRequest:
+                    (controller, downloadStartRequest) async {
+                      final downloadUrl = downloadStartRequest.url.toString();
+                      if (await canLaunchUrl(Uri.parse(downloadUrl))) {
+                        await launchUrl(
+                          Uri.parse(downloadUrl),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      }
+                    },
+              ),
+              if (isLoading)
+                ColoredBox(
+                  color: Colors.white,
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          'assets/mSeva.jpg',
+                          height: 72,
+                          fit: BoxFit.contain,
+                        ),
+                        const SizedBox(height: 24),
+                        const CircularProgressIndicator(color: AppColors.blue),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Loading...',
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: AppColors.lightGrey),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
